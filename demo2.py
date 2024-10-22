@@ -39,11 +39,10 @@ class DataPreprocessor:
 
         return np.array(x), np.array(y), df['date'].values[self.seq_length:]  # 返回日期
 
-
 # 模型定义模块
-class LSTMPVModel(nn.Module):
+class BiLSTMPVModel(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, dropout):
-        super(LSTMPVModel, self).__init__()
+        super(BiLSTMPVModel, self).__init__()
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True,
                             dropout=dropout, bidirectional=True)  # 添加bidirectional=True
         self.fc = nn.Linear(hidden_size * 2, 1)  # 输出维度调整为hidden_size * 2
@@ -188,7 +187,7 @@ def main():
 
     # 3. 模型定义
     input_size = x_train.shape[2]
-    model = LSTMPVModel(input_size, hidden_size, num_layers, dropout)
+    model = BiLSTMPVModel(input_size, hidden_size, num_layers, dropout)
 
     # 4. 模型训练
     trainer = Trainer(model, learning_rate, epochs)
